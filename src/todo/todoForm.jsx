@@ -36,7 +36,7 @@ const TodoForm = props => {
     </div>
 );}
 
-const mapStateToProps = state => ({description: state.todo.description});
+const mapStateToProps = state => ({ description: state.todo.description });
 const mapDispatchToProps = dispatch =>      //dispatch é o cara que de fato dispara a ação e passa essa ação para todos os Reducers, 
     bindActionCreators({ changeDescription }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(TodoForm);
