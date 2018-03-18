@@ -1,3 +1,8 @@
+/**
+ * Todas as ações da nossa aplicação de lista de tarefas
+ * Obs.: toda request é um tipo de promise
+ */
+
 import axios from 'axios';
 
 const URL = 'http://localhost:3003/api/todos';
@@ -13,4 +18,12 @@ export const search = () => {       //precisamos de um middleware para permitir 
         type: 'TODO_SEARCHED',
         payload: request
     }
+}
+
+export const add = description => {
+    const request = axios.post(URL, {description});
+    return [
+        { type: 'TODO_ADDED', payload: request },
+        search()        //assim já retornamos a lista atualizada! Porém é preciso garantir de que ele só irá fazer essa pesquisa depois que a a promise que adiciona o item houver sido resolvida
+    ]
 }

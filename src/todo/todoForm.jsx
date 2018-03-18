@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import Grid from '../template/grid';
 import IconButton from '../template/iconButton';
 
-import { changeDescription, search } from './todoActions';
+import { add, changeDescription, search } from './todoActions';
 
 class TodoForm extends Component {      //mudamos de uma função para uma classe, pois precisamos usar um middleware para que a ação de pesquisa funcione, devido a haverem várias chamadas assincronas lá, e assim precisamo usar aqui o método componentWillMount()
     constructor(props) {
@@ -18,14 +18,16 @@ class TodoForm extends Component {      //mudamos de uma função para uma class
     }
 
     keyHandler(e){
+        const { add, search, description } = this.props;        //estamos extraindo de add, search e description (duas funções e um atributo) de this.props, ou seja, as propriedades atuais
         if (e.key === 'Enter') {
-            e.shiftKey ? props.handleSearch() : props.handleAdd();
+            e.shiftKey ? search() : add(description);
         } else if (e.key === 'Escape') {
             props.handleClear();
         }
     }
 
     render() {
+        const { add, search, description } = this.props;        //estamos extraindo de add, search e description (duas funções e um atributo) de this.props, ou seja, as propriedades atuais
         return (
         <div role='form' className='todoForm'>
             <Grid cols='12 9 10'>
@@ -38,9 +40,9 @@ class TodoForm extends Component {      //mudamos de uma função para uma class
             </Grid>
             <Grid cols='12 3 2'>
                 <IconButton style='primary' icon='plus'
-                    onClick={this.props.handleAdd}></IconButton>
+                    onClick={ () => add(description) }></IconButton>
                 <IconButton style='info' icon='search'
-                    onClick={this.props.handleSearch}></IconButton>
+                    onClick={ () => search() }></IconButton>
                 <IconButton style='default' icon='close'
                     onClick={this.props.handleClear}></IconButton>
             </Grid>
@@ -51,5 +53,5 @@ class TodoForm extends Component {      //mudamos de uma função para uma class
 
 const mapStateToProps = state => ({ description: state.todo.description });
 const mapDispatchToProps = dispatch =>      //dispatch é o cara que de fato dispara a ação e passa essa ação para todos os Reducers, 
-    bindActionCreators({ changeDescription, search }, dispatch);
+    bindActionCreators({ add, changeDescription, search }, dispatch);
 export default connect(mapStateToProps, mapDispatchToProps)(TodoForm);
