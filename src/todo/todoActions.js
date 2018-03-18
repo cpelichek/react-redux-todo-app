@@ -21,9 +21,9 @@ export const search = () => {       //precisamos de um middleware para permitir 
 }
 
 export const add = description => {
-    const request = axios.post(URL, {description});
-    return [
-        { type: 'TODO_ADDED', payload: request },
-        search()        //assim já retornamos a lista atualizada! Porém é preciso garantir de que ele só irá fazer essa pesquisa depois que a a promise que adiciona o item houver sido resolvida
-    ]
+    return dispatch => {        //é o dispatch quem dispara o evento, a ação, para todos os reducers(!)
+        axios.post(URL, { description })
+            .then(resp => dispatch({ type: 'TODO_ADDED', payload: resp.data }))     //.then é uma promise
+            .then(resp => dispatch(search()));      //assim já retornamos a lista atualizada! E por conta da ordem das chamadas das promises .then garantimos que ele só irá fazer essa pesquisa depois que a a promise que adiciona o item houver sido resolvida
+    }
 }
