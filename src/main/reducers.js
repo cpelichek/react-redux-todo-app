@@ -1,4 +1,5 @@
 /**
+ * A store é pega à partir daqui
  * Reducer é usado para evoluir o estado
  */
 
